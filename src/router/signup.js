@@ -6,14 +6,14 @@ import config from '../config';
 
 
 export default async function(req, res) {
-  const { email, name, password } = req.body;
+  const { email, name, password, app_code, app_version, app_data } = req.body;
 
   if ( !name || !password || !email ) {
     res.status(400).json({ success: false, message: 'info not enough', });
   }
 
   // see if name or email is occupied
-  const user = await User.findOne({ $or: [ { name }, { email } ] });
+  const user = await User.findOne({ $or: [ { name }, { email }, { app_code } ] });
 
   if (!user) {
     // send verification email
@@ -31,7 +31,7 @@ export default async function(req, res) {
     });
 
     const hashedPassword = await hashPassword(password);
-    await new User({ email, name, password: hashedPassword, verified: false }).save();
+    await new User({ email, name, password: hashedPassword, verified: false, app_code, app_version, app_data }).save();
 
     console.log('____User saved');
 
