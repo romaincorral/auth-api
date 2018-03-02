@@ -5,8 +5,8 @@ import config from '../config';
 
 
 export default async function(req, res) {
-  const { email, name, password } = req.body;
-  const user = await User.findOne({ $or: [ { name }, { email } ] });
+  const { email, name, password, app_code, app_version } = req.body;
+  const user = await User.findOne({ $or: [ { name }, { email } ], { app_code }, { app_version } });
 
   // console.log('login', config);
   if (!user) {
@@ -28,6 +28,8 @@ export default async function(req, res) {
         success: true,
         message: `${config.USER_MESSAGE.LOGIN_SUCCESS} ${user.name}`,
         name: user.name,
+        app_data: user.app_data,
+        app_version: user.app_version,
         token: token
       });
     }
