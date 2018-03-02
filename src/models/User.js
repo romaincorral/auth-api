@@ -7,6 +7,9 @@ const User = mongoose.model('User', new Schema({
   email: String,
   name: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true },
+  app_code: { type: String, required: true },
+  app_version: { type: Number, required: true },
+  app_data: { type: String, required: false },
   verified: Boolean,
 }));
 
